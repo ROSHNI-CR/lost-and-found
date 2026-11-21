@@ -1,0 +1,32 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.egg-info
+
+# Environment variables & secrets
+.env
+*.env
+backend/.env
+
+# Uploaded files
+uploads/
+backend/uploads/
+
+# Node.js / Frontend
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+
+# Testing & caches
+.pytest_cache/
+.vite/
+
+# macOS / Windows
+.DS_Store
+Thumbs.db
