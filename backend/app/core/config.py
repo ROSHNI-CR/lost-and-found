@@ -9,6 +9,7 @@ class Settings(BaseSettings):
 
     # Database
     MONGODB_URI: str = "mongodb://127.0.0.1:27017"
+    MONGODB_URL: Optional[str] = None
     DATABASE_NAME: str = "findit_ai"
 
     # AI Configuration
@@ -18,6 +19,7 @@ class Settings(BaseSettings):
 
     # Security & Auth
     JWT_SECRET_KEY: str = "findit-super-secret-security-jwt-key-change-in-production-2026"
+    SECRET_KEY: Optional[str] = None
     JWT_ALGORITHM: str = "HS256"
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 24 hours
     

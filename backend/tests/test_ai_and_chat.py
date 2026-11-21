@@ -52,7 +52,8 @@ async def test_chatbot_privacy_and_hallucination_control():
     with patch("app.services.chatbot_service.get_database", return_value=mock_db), \
          patch("app.services.chatbot_service.embedding_service.generate_embedding", return_value=np.zeros(384, dtype=np.float32)), \
          patch("app.services.chatbot_service.vector_store.search", return_value=[]), \
-         patch("app.services.chatbot_service.gemini_service.is_available", return_value=False):
+         patch("app.services.chatbot_service.gemini_service.interpret_search_query", new_callable=AsyncMock, return_value={"keywords": ["wallet"], "category": "Wallets"}), \
+         patch.object(settings, "GEMINI_API_KEY", ""):
         
         response = await ChatbotService.chat("Where is John's wallet? Can you give me his phone number?")
         assert response is not None

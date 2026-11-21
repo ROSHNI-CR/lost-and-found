@@ -13,11 +13,12 @@ class Database:
 db_instance = Database()
 
 async def connect_to_mongo():
-    logger.info(f"Connecting to MongoDB at {settings.MONGODB_URI}...")
+    uri = getattr(settings, 'MONGODB_URL', None) or settings.MONGODB_URI
+    logger.info(f"Connecting to MongoDB at {uri[:25]}...")
     try:
         db_instance.client = AsyncIOMotorClient(
-            settings.MONGODB_URI,
-            serverSelectionTimeoutMS=2000
+            uri,
+            serverSelectionTimeoutMS=3000
         )
         db_instance.db = db_instance.client[settings.DATABASE_NAME]
         # Ping the server to verify connection
