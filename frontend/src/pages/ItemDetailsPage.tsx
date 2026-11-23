@@ -12,7 +12,8 @@ import {
   Clock,
   Building,
   Layers,
-  AlertCircle
+  AlertCircle,
+  User
 } from 'lucide-react';
 import { itemService } from '../services/itemService';
 import { matchService } from '../services/matchService';
@@ -89,6 +90,12 @@ export const ItemDetailsPage: React.FC = () => {
   const colors = Array.isArray(item.color) ? item.color : (item.color ? [item.color] : []);
   const images = item.image_urls || [];
 
+  const getFullImageUrl = (url?: string) => {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) return url;
+    return `https://hitk-findit-backend.onrender.com${url.startsWith('/') ? '' : '/'}${url}`;
+  };
+
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Back button */}
@@ -106,9 +113,12 @@ export const ItemDetailsPage: React.FC = () => {
           <div className="relative h-80 w-full rounded-2xl bg-slate-100 overflow-hidden border border-slate-200 flex items-center justify-center">
             {images.length > 0 ? (
               <img
-                src={images[0]}
+                src={getFullImageUrl(images[0])}
                 alt={item.title}
                 className="w-full h-full object-contain"
+                onError={(e) => {
+                  (e.target as HTMLElement).style.display = 'none';
+                }}
               />
             ) : (
               <div className="flex flex-col items-center text-slate-400 p-6">
@@ -184,6 +194,16 @@ export const ItemDetailsPage: React.FC = () => {
                 <span className="text-slate-400 block font-medium">Date Reported</span>
                 <span className="font-semibold text-slate-800 flex items-center gap-1 mt-0.5">
                   <Calendar className="w-3.5 h-3.5 text-slate-400" /> {dateStr?.slice(0, 10)}
+                </span>
+              </div>
+              <div className="col-span-2">
+                <span className="text-slate-400 block font-medium">{isFound ? 'Found By' : 'Lost By'}</span>
+                <span className="font-semibold text-slate-800 flex items-center gap-1.5 mt-0.5">
+                  <User className="w-3.5 h-3.5 text-indigo-600" />
+                  {isOwner ? `${user?.name || 'You'} (Your Account)` : 'Verified HITK Campus Member'}
+                  <span className="text-[10px] font-normal text-slate-400 ml-1">
+                    (Direct contact hidden for student privacy & safe security handover)
+                  </span>
                 </span>
               </div>
               {item.storage_location && (

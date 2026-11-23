@@ -26,7 +26,12 @@ interface ItemCardProps {
 export const ItemCard: React.FC<ItemCardProps> = ({ item, type, onClaim }) => {
   const location = item.location_lost || item.location_found || 'Heritage Campus Grounds';
   const dateStr = item.approximate_date_lost || item.date_found || '';
-  const imageUrl = item.image_urls && item.image_urls.length > 0 ? item.image_urls[0] : null;
+  const rawImageUrl = item.image_urls && item.image_urls.length > 0 ? item.image_urls[0] : null;
+  const imageUrl = rawImageUrl
+    ? (rawImageUrl.startsWith('http://') || rawImageUrl.startsWith('https://') || rawImageUrl.startsWith('data:')
+        ? rawImageUrl
+        : `https://hitk-findit-backend.onrender.com${rawImageUrl.startsWith('/') ? '' : '/'}${rawImageUrl}`)
+    : null;
 
   const colorTags = Array.isArray(item.color)
     ? item.color
