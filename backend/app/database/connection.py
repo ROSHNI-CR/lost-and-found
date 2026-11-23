@@ -38,6 +38,7 @@ async def close_mongo_connection():
 def get_database() -> AsyncIOMotorDatabase:
     if db_instance.db is None:
         # Fallback initialization if accessed outside lifespan
-        db_instance.client = AsyncIOMotorClient(settings.MONGODB_URI, serverSelectionTimeoutMS=2000)
+        uri = getattr(settings, 'MONGODB_URL', None) or settings.MONGODB_URI
+        db_instance.client = AsyncIOMotorClient(uri, serverSelectionTimeoutMS=3000)
         db_instance.db = db_instance.client[settings.DATABASE_NAME]
     return db_instance.db
